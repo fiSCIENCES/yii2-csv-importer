@@ -36,7 +36,7 @@ class ARUpdateStrategy extends BaseUpdateStrategy{
 			if($model->save()) {
                 return true;
             } else {
-                Yii::warning($model->tableName() . ': ' . $model->getErrorSummary(true));
+                Yii::warning($model->tableName() . ': ' . implode(',', $model->getErrorSummary(true)));
                 return false;
             }
 		} else {
