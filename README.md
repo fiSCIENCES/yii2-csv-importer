@@ -18,11 +18,12 @@ or add
 "ruskid/yii2-csv-importer": "dev-master"
 ```
 
-to the require section of your `composer.json` file.
+to the required section of your `composer.json` file.
 
 
 Usage
 -----
+All model AR rules errors will be logged as Warning/App.
 
 ```php
 $importer = new CSVImporter;
@@ -34,6 +35,18 @@ $importer->setData(new CSVReader([
         'delimiter' => ';'
     ]
 ]));
+// By default, 'startFromLine' is set to 1
+// This will give you the CSV header in the CSVReader class '$importer->header' as an array
+// You could use it to do the config in a foreach()
+//    foreach ($importer->header as $attribute) {
+//        $configs[] = [
+//            'attribute' => $attribute,
+//            'value' => function($line) use($i) {
+//                return $line[$i];
+//            },
+//        ];
+//        $i++;
+//    }
 
 //Import multiple (Fast but not reliable). Will return number of inserted rows
 $numberRowsAffected = $importer->import(new MultipleImportStrategy([
@@ -44,7 +57,7 @@ $numberRowsAffected = $importer->import(new MultipleImportStrategy([
             'value' => function($line) {
                 return $line[1];
             },
-            'unique' => true, //Will filter and import unique values only. can by applied for 1+ attributes
+            'unique' => true, //Will filter and import unique values only. Can be applied for 1+ attributes
         ]
     ],
 ]));
@@ -78,7 +91,7 @@ $importer->import(new MultipleImportStrategy([
         [
             'attribute' => 'product_name',
             'value' => function($line) {
-                //You cand perform your filters and excludes here. Empty exclude example:
+                // You can perform your filters and excludes here. Empty exclude example:
                 return $line[7] != "" AppHelper::importStringFromCSV($line[7]) : null;
             },
         ],

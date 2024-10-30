@@ -33,7 +33,12 @@ class ARUpdateStrategy extends BaseUpdateStrategy{
 		$model = $this->className::find()->where($row)->one();
 		if ($model) {
 			$model->setAttributes($values, false);
-			return $model->save();
+			if($model->save()) {
+                return true;
+            } else {
+                Yii::warning($model->getErrorSummary(true));
+                return false;
+            }
 		} else {
 			return false;
 		}

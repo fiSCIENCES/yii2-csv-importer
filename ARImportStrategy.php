@@ -8,6 +8,7 @@
 
 namespace ruskid\csvimporter;
 
+use Yii;
 use yii\base\Exception;
 use ruskid\csvimporter\ImportInterface;
 use ruskid\csvimporter\BaseImportStrategy;
@@ -64,12 +65,12 @@ class ARImportStrategy extends BaseImportStrategy implements ImportInterface {
                     if (isset($config['attribute']) && $model->hasAttribute($config['attribute'])) {
                         $value = call_user_func($config['value'], $row);
 
-                        //Create array of unique attributes
+                        // Create array of unique attributes
                         if (isset($config['unique']) && $config['unique']) {
                             $uniqueAttributes[$config['attribute']] = $value;
                         }
 
-                        //Set value to the model
+                        // Set value to the model
                         $model->setAttribute($config['attribute'], $value);
                     } else
                     if (isset($config['virtual']) && $config['virtual']) {
@@ -78,9 +79,11 @@ class ARImportStrategy extends BaseImportStrategy implements ImportInterface {
                         $model->{$config['attribute']} = $value;
                     }
                 }
-                //Check if model is unique and saved with success
+                // Check if model is unique and saved with success
                 if ($this->isActiveRecordUnique($uniqueAttributes) && $model->save()) {
                     $importedPks[] = $model->primaryKey;
+                } else {
+                    Yii::warning($model->getErrorSummary(true));
                 }
             }
         }
