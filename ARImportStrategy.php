@@ -83,7 +83,7 @@ class ARImportStrategy extends BaseImportStrategy implements ImportInterface {
                 if ($this->isActiveRecordUnique($uniqueAttributes) && $model->save()) {
                     $importedPks[] = $model->primaryKey;
                 } else {
-                    Yii::warning($model->getErrorSummary(true));
+                    Yii::warning($model->tableName() . ': ' . $model->getErrorSummary(true));
                 }
             }
         }
